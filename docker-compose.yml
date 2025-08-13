@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  spring_service:
+    image: quachthekiet/microservice-spring:1.0
+    ports:
+      - "8080:8080"
+
+  dotnet_service:
+    image: quachthekiet/microservice-dotnet:1.0
+    ports:
+      - "5100:5100"
+
+  nginx_gateway:
+    image: quachthekiet/microservice-nginx:1.0
+    ports:
+      - "8081:80"
+    depends_on:
+      - spring_service
+      - dotnet_service
+
+  redis_service:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
